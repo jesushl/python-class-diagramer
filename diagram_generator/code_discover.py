@@ -4,21 +4,56 @@ from typing import List
 
 
 class CodeDiscover:
-    def __init__(self):
+    def __init__(self, root_directory: str) -> None:
         self.file_graph: dict = {}
-        self.root_directory: str = None
+        self.root_directory: str = root_directory
+        self.FILES_KEY: str = "files"
+        self.DIRECORIES_KEY: str = "directories"
+        self.MODULE_DEF: str = "__init__.py"
+        self.python_file_end = ".py"
 
-    def set_root_directory(self) -> None:
+    def is_module(self, directory: str):
+        directories = os.listdir(directory)
+        for _directory in directories:
+            # TODO: Change this to regex
+            if self.MODULE_DEF in _directory:
+                return True
+        return False
+
+    def get_python_code(self, directory: str):
+        files = []
+        _ = self.get_directory_files_and_folders(directory)
+        _files = _[self.FILES_KEY]
+        for _inner_file in _files:
+            if self.python_file_end in _inner_file:
+                files.append(_inner_file)
+        _directories = _[self.DIRECORIES_KEY]
+        if _directories:
+            for directory in _directories:
+                if self.is_module(directory):
+                    files = _files + self.get_python_code(directory)
+        return files
+
+    def get_directory_files_and_folders(self, directory: str):
+        _directories = os.listdir(directory)
+        files = []
+        directories = []
+        for directory in _directories:
+            current_path = "{root}/{directory}".format(
+                root=self.root_directory,
+                directory=directory
+            )
+            if os.path.isdir(current_path):
+                directories.append(current_path)
+            else:
+                files.append(current_path)
+        return {self.FILES_KEY: files,   self.DIRECORIES_KEY: directories}
+
+    def get_python_files(self) -> List:
         pass
 
-    def get_directories(self, path: List[str]):
+    def is_python_module(self) -> bool:
         pass
 
-    def get_python_files(self):
-        pass
-
-    def is_python_module(self):
-        pass
-
-    def add_file_node(self, file: str):
+    def add_file_node(self, file: str) -> None:
         pass
