@@ -1,4 +1,5 @@
 import os
+import re
 # data types
 from typing import List
 
@@ -10,13 +11,14 @@ class CodeDiscover:
         self.FILES_KEY: str = "files"
         self.DIRECORIES_KEY: str = "directories"
         self.MODULE_DEF: str = "__init__.py"
-        self.python_file_end = ".py"
+        self.module_def_refEx: re = re.compile("__init__.py$")
+        self.python_file_regEx: re = re.compile(".py$")
 
     def is_module(self, directory: str):
         directories = os.listdir(directory)
         for _directory in directories:
             # TODO: Change this to regex
-            if self.MODULE_DEF in _directory:
+            if self.module_def_refEx.search(_directory):
                 return True
         return False
 
@@ -25,7 +27,7 @@ class CodeDiscover:
         _ = self.get_directory_files_and_folders(directory)
         _files = _[self.FILES_KEY]
         for _inner_file in _files:
-            if self.python_file_end in _inner_file:
+            if self.python_file_regEx.search(_inner_file):
                 files.append(_inner_file)
         _directories = _[self.DIRECORIES_KEY]
         if _directories:
