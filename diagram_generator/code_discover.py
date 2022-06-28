@@ -50,12 +50,3 @@ class CodeDiscover:
             else:
                 files.append(current_path)
         return {self.FILES_KEY: files,   self.DIRECORIES_KEY: directories}
-
-    def get_python_files(self) -> List:
-        pass
-
-    def is_python_module(self) -> bool:
-        pass
-
-    def add_file_node(self, file: str) -> None:
-        pass
